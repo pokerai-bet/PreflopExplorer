@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pokerai Preflop Explorer</title>
+  </head>
+  <body>
+    <nav class="nav">
+      <a class="brand" href="https://pokerai.bet">Pokerai <span>API</span></a>
+      <div class="nav-actions">
+        <span class="quota" id="pfquota"></span>
+        <a id="account-link" href="https://pokerai.bet/login">登录</a>
+      </div>
+    </nav>
+    <main>
+      <header class="hero">
+        <p class="eyebrow">Study tool</p>
+        <h1>Preflop Explorer</h1>
+        <p>沿现有 Pokerai Preflop 库的行动树浏览 6-max mixed strategy。</p>
+      </header>
+      <div id="locked" class="locked hide">
+        <h2>登录后查看策略</h2>
+        <p>每个首次打开的策略节点消耗 1 次你自己的 presolved quota；相同节点会在本次会话中缓存。</p>
+        <a class="btn primary" href="https://pokerai.bet/login">登录 Pokerai</a>
+      </div>
+      <div id="explorer" class="hide">
+        <div class="toolbar">
+          <select class="input" id="pfv" title="版本" aria-label="Preflop chart version"></select>
+          <button class="btn ghost sm" id="pfreset" title="回到 UTG 首入">↺ 重置行动线</button>
+          <span class="pill" id="pfcount"></span>
+        </div>
+        <div class="card"><div id="preflop-body"><div class="empty">选择版本后自动加载</div></div></div>
+      </div>
+      <div id="toast" role="status" aria-live="polite"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
