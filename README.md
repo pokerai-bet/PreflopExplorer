@@ -117,4 +117,6 @@ Preflop Explorer is designed for off-table study and product development. It is 
 
 ## License and data
 
-The source code in this repository is publicly visible as a reference implementation. No open-source license is currently included, and this repository does not grant a license to redistribute Pokerai's presolved strategy data. Confirm the applicable source-code and Pokerai API terms before redistribution or commercial use.
+The source code in this repository is licensed under the [Apache License 2.0](LICENSE). You may use, modify, and distribute the code subject to that license and the attribution information in [NOTICE](NOTICE).
+
+The code license does **not** grant rights to Pokerai strategy data, presolved ranges, API access, credentials, quotas, hosted services, trademarks, or logos. Those assets and services are not part of the licensed work and remain subject to their applicable Pokerai terms. In particular, do not extract or redistribute strategy responses unless the applicable service terms expressly permit it.
