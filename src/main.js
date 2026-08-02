@@ -5,6 +5,8 @@
  * endpoint routing, removal of the out-of-scope flop handoff, and presentation.
  */
 
+import { applyPageI18n, currentLocale, tr } from './i18n.js'
+
 const $ = (id) => document.getElementById(id)
 const API_BASE = (import.meta.env.VITE_POKERAI_API_BASE_URL || 'https://pokerai.bet').replace(/\/$/, '')
 const LOGIN_URL = `${API_BASE}/login`
@@ -13,23 +15,6 @@ const ENDPOINTS = {
   '/auth/admin/preflop/meta': '/v1/apps/preflop-explorer/meta',
   '/auth/admin/preflop/tree': '/v1/apps/preflop-explorer/tree',
   '/auth/admin/preflop/strategy': '/v1/apps/preflop-explorer/strategy',
-}
-
-const TEXT = {
-  preflopNoData: '没有可用的 Preflop 数据', loadFailed: '加载失败', preflopNodeMissing: '行动节点不存在',
-  viewStepTitle: '回到此行动之前', viewStrategyTitle: (seat) => `查看 ${seat} 的策略`, clickActionTitle: '选择此行动',
-  actionLineFinished: '行动线结束', actionLineTerminal: '行动线已结束', toActNoStrategy: (seat) => `${seat} 行动，当前节点没有策略`,
-  chooseActionHint: '选择一个行动继续', strategyNotFound: '未找到该节点策略', strategyLoadFailed: '策略加载失败',
-  priorStrategyHeading: (seat, action, raise, call, fold) => `${seat} · ${action}（Raise ${raise}% / Call ${call}% / Fold ${fold}%）`,
-  heroStrategyHeading: (seat) => `${seat} 策略`, preciseStrategyHint: (side, seat) => `点击${side}范围中的手牌查看 ${seat} 精确频率`,
-  leftSide: '左侧', rightSide: '右侧', handsCount: (count, actions) => `${count} hands · ${actions}`,
-  terminalActionTitle: '该行动没有更深节点；点击查看对应范围', noPreflopStrategy: '没有可用策略',
-  comboStrategyCaption: (count) => `${count} combos · r=raise c=call`,
-}
-
-function tr(key, ...args) {
-  const value = TEXT[key]
-  return typeof value === 'function' ? value(...args) : value || key
 }
 
 function token() {
@@ -73,21 +58,21 @@ function adminRaw(message, detail) {
 
 function setQuota(quota) {
   if (!quota || !Number.isFinite(Number(quota.used)) || !Number.isFinite(Number(quota.limit))) return
-  $('pfquota').textContent = `Presolved ${quota.used} / ${quota.limit}`
+  $('pfquota').textContent = tr('quota', quota.used, quota.limit)
 }
 
 function showLocked() {
   $('locked').classList.remove('hide')
   $('explorer').classList.add('hide')
-  $('account-link').textContent = '登录'
+  $('account-link').textContent = tr('signIn')
   $('account-link').href = LOGIN_URL
 }
 
 function showExplorer() {
   $('locked').classList.add('hide')
   $('explorer').classList.remove('hide')
-  $('account-link').textContent = 'Dashboard'
-  $('account-link').href = `${API_BASE}/dashboard`
+  $('account-link').textContent = tr('dashboard')
+  $('account-link').href = `${API_BASE}/dashboard?lang=${encodeURIComponent(currentLocale.dashboardLang)}`
 }
 
 /* ---------- preflop DB (browse, read-only): upstream business logic ---------- */
@@ -116,7 +101,7 @@ async function pfStrat(version, position, situation, context) {
   setQuota(result && result.quota)
   if (response.status === 429) {
     setQuota({ used: result.used, limit: result.limit })
-    toast(result.error === 'quota_exceeded' ? 'Presolved quota 已用完' : '请求过于频繁，请稍后再试')
+    toast(result.error === 'quota_exceeded' ? tr('quotaExceeded') : tr('rateLimited'))
   }
   if (result && result.status === 'success') pfStratCache[key] = result
   return result
@@ -187,7 +172,7 @@ function pfRender() {
   const decision = node.decision, selectedIndex = pfSelIdx()
   const head = decision ? `<div class="nodemeta">${esc(decision.hero)} · ${esc(pfSitLabel(decision.situation))}</div>`
     : (node.toAct ? `<div class="nodemeta">${esc(tr('toActNoStrategy', node.toAct))}</div>` : `<div class="nodemeta">${tr('actionLineTerminal')}</div>`)
-  const strategy = decision ? '<div class="empty"><span class="spin"></span><small>首次加载此节点会消耗 1 次 presolved quota</small></div>'
+  const strategy = decision ? `<div class="empty"><span class="spin"></span><small>${esc(tr('firstLoadQuota'))}</small></div>`
     : (node.toAct ? `<div class="sub">${tr('chooseActionHint')}</div>` : `<div class="sub">${tr('actionLineFinished')}</div>`)
   wrap.innerHTML = pfColnav(node, selectedIndex) + head + '<div id="pfstrat">' + strategy + '</div>'
   wrap.querySelectorAll('.pfrew').forEach((button) => { button.onclick = () => {
@@ -259,7 +244,8 @@ async function pfLoadStrat(decision, mine, selectedIndex) {
     }
     $('pfcount').textContent = tr('handsCount', Object.keys(grid).length, (result.actions || []).join('/'))
     const heroColumn = `<div><div class="rgcap">${esc(tr('heroStrategyHeading', decision.hero))}</div><div id="pfherogrid">${pfGridHtml(grid, true)}</div><div id="pfselR" class="cellsel"><span class="sub">${esc(tr('preciseStrategyHint', tr('rightSide'), decision.hero))}</span></div></div>`
-    wrap.innerHTML = `${pfAggBar(aggregate)}${priorHtml ? `<div class="ranges2">${priorHtml}${heroColumn}</div>` : heroColumn}`
+    const emptyColumn = '<div class="range-slot-empty" aria-hidden="true"></div>'
+    wrap.innerHTML = `${pfAggBar(aggregate)}<div class="ranges2">${priorHtml || heroColumn}${priorHtml ? heroColumn : emptyColumn}</div>`
     const heroGrid = $('pfherogrid')
     if (heroGrid) heroGrid.querySelectorAll('.hcell.sc').forEach((cell) => { cell.onclick = () => pfSelectHand(cell.dataset.h, cell, pfCur, 'pfselR') })
     const priorGrid = $('pfprigrid')
@@ -355,6 +341,7 @@ function pfSelectHand(hand, cell, source, panelId) {
 }
 
 async function boot() {
+  applyPageI18n()
   document.querySelectorAll('a[href="https://pokerai.bet/login"]').forEach((link) => { link.href = LOGIN_URL })
   if (!token()) { showLocked(); return }
   showExplorer()
