@@ -2,7 +2,7 @@
 
 公开的 Pokerai API Preflop range explorer 示例项目。它只调用受 JWT 保护的 Pokerai Explorer API；本仓库不包含策略数据、API key、固定 JWT 或第三方凭据。
 
-项目规划见 [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)。策略查询始终由 Pokerai 平台服务端完成，本仓库不包含策略库或数据。
+项目规划见 [docs/IMPLEMENTATION_PLAN.md](docs/IMPLEMENTATION_PLAN.md)，视觉基线见 [DESIGN.md](DESIGN.md)。策略查询始终由 Pokerai 平台服务端完成，本仓库不包含策略库或数据。
 
 ## 本地开发
 

@@ -4,24 +4,43 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/png" href="https://pokerai.bet/assets/pokerai-icon.png" />
     <title>Pokerai Preflop Explorer</title>
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <nav class="nav">
-      <a class="brand" href="https://pokerai.bet">Pokerai <span>API</span></a>
-      <div class="nav-actions">
-        <span class="quota" id="pfquota"></span>
-        <a id="account-link" href="https://pokerai.bet/login">登录</a>
+    <nav class="site-nav" aria-label="Pokerai">
+      <div class="shell nav-inner">
+        <a class="brand" href="https://pokerai.bet">
+          <img src="https://pokerai.bet/assets/pokerai-icon.png" alt="" width="30" height="30" />
+          <span>Pokerai API</span>
+        </a>
+        <div class="nav-links">
+          <a href="https://pokerai.bet/docs">Docs</a>
+          <a href="https://pokerai.bet/reference">Reference</a>
+          <a class="current" href="https://pokerai.bet/ranges" aria-current="page">Ranges</a>
+          <a href="https://pokerai.bet/guides">Guides</a>
+          <a href="https://pokerai.bet/showcases">Showcases</a>
+          <a href="https://pokerai.bet/pricing">Pricing</a>
+          <a href="https://github.com/pokerai-bet" target="_blank" rel="noopener">GitHub</a>
+        </div>
+        <div class="nav-actions">
+          <span class="locale-label" aria-label="当前语言：中文">◎ ZH</span>
+          <span class="quota" id="pfquota"></span>
+          <a class="account-link" id="account-link" href="https://pokerai.bet/login">登录</a>
+        </div>
       </div>
     </nav>
-    <main>
+    <main class="shell app-main">
       <header class="hero">
-        <p class="eyebrow">Study tool</p>
-        <h1>Preflop Explorer</h1>
-        <p>沿现有 Pokerai Preflop 库的行动树浏览 6-max mixed strategy。</p>
+        <div>
+          <p class="eyebrow">Study tool · Presolved strategy</p>
+          <h1>Preflop Explorer</h1>
+          <p>沿现有 Pokerai Preflop 库的行动树浏览 6-max mixed strategy。</p>
+        </div>
       </header>
       <div id="locked" class="locked hide">
+        <p class="locked-label">Pokerai account required</p>
         <h2>登录后查看策略</h2>
         <p>每个首次打开的策略节点消耗 1 次你自己的 presolved quota；相同节点会在本次会话中缓存。</p>
         <a class="btn primary" href="https://pokerai.bet/login">登录 Pokerai</a>
@@ -36,6 +55,50 @@
       </div>
       <div id="toast" role="status" aria-live="polite"></div>
     </main>
+    <footer class="site-footer">
+      <div class="shell footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="https://pokerai.bet">
+            <img src="https://pokerai.bet/assets/pokerai-icon.png" alt="" width="30" height="30" />
+            <span>Pokerai API</span>
+          </a>
+          <p>Solver-grade GTO strategy over HTTP.</p>
+        </div>
+        <div class="footer-group">
+          <h3>Resources</h3>
+          <a href="https://pokerai.bet/docs">Docs</a>
+          <a href="https://pokerai.bet/reference">Reference</a>
+          <a href="https://pokerai.bet/ranges">Ranges</a>
+          <a href="https://pokerai.bet/guides">Guides</a>
+          <a href="https://pokerai.bet/showcases">Showcases</a>
+        </div>
+        <div class="footer-group">
+          <h3>Developers</h3>
+          <a href="https://pokerai.bet/openapi.en.json">OpenAPI</a>
+          <a href="https://pokerai.bet/llms.txt">llms.txt</a>
+          <a href="https://github.com/pokerai-bet" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://github.com/pokerai-bet/pokerai-python" target="_blank" rel="noopener">Python SDK</a>
+          <a href="https://github.com/pokerai-bet/pokerai-js" target="_blank" rel="noopener">JS SDK</a>
+          <a href="https://github.com/pokerai-bet/mcp" target="_blank" rel="noopener">MCP</a>
+        </div>
+        <div class="footer-group">
+          <h3>Support</h3>
+          <a href="https://pokerai.bet/pricing">Pricing</a>
+          <a href="https://pokerai.bet/faq">FAQ</a>
+          <a href="https://pokerai.bet/changelog">Changelog</a>
+          <a href="https://pokerai.bet/contact">Contact</a>
+          <a href="https://pokerai.bet/login">Sign in</a>
+          <a href="https://t.me/PokerAIAPICommunity" target="_blank" rel="noopener">Telegram</a>
+          <a href="https://discord.gg/ZnxCWNfHb7" target="_blank" rel="noopener">Discord</a>
+        </div>
+        <div class="footer-group">
+          <h3>Legal</h3>
+          <a href="https://pokerai.bet/terms">Terms</a>
+          <a href="https://pokerai.bet/privacy">Privacy</a>
+        </div>
+      </div>
+      <div class="shell footer-bottom">© 2026 Pokerai.bet</div>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
