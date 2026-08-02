@@ -20,21 +20,18 @@
 
 ### 决策：使用受控的登录用户 API，而不是浏览器 API key
 
-新增 Pokerai 平台接口：
+新增 Pokerai 平台接口。行动树由现有私有 preflop library 生成，客户端只提交服务端签发的规范路径，不自行推导局面：
 
 ```http
-POST /v1/apps/preflop-explorer/range
+POST /v1/apps/preflop-explorer/strategy
 Authorization: Bearer <Pokerai user JWT>
 Content-Type: application/json
 
 {
-  "table_size": "6max",
-  "preflop_version": "6max",
-  "positions": { "hero": "UTG" },
-  "preflop_actions": [
-    { "position": "SB", "action": "small blind", "amount": 0.5 },
-    { "position": "BB", "action": "big blind", "amount": 1 }
-  ]
+  "version": "6max",
+  "position": "MP",
+  "situation": "Raise",
+  "context": "UTG:Raise"
 }
 ```
 
@@ -42,7 +39,9 @@ Content-Type: application/json
 
 ```ts
 type ExplorerRangeResponse = {
-  range: Record<string, { fold: number; call: number; raise: number }>;
+  status: "success";
+  grid: Record<string, { fold: number; call: number; raise: number; combos: number }>;
+  combos: Record<string, { fold: number; call: number; raise: number }>;
   quota: { used: number; limit: number };
 };
 ```
@@ -55,6 +54,12 @@ type ExplorerRangeResponse = {
 4. 对配额耗尽返回统一的 `429 quota_exceeded`（或平台最终选定的等价标准码），对无库记录返回 `404 no_solution`。
 5. 针对用户和 IP 限流，并将 CORS Origin 限为生产 Explorer 域名与本地开发地址。
 6. 不接受匿名调用，不提供共享 demo key，也不把长期 API key 交给浏览器。
+7. 请求/响应语义直接复用现有 preflop `strategy()`；平台根据同版本 tree 验证
+   `position`、`situation`、`context` 确实对应决策节点。
+
+同一命名空间还提供不计配额的 `POST /v1/apps/preflop-explorer/meta` 和
+`POST /v1/apps/preflop-explorer/tree`。两者仍要求用户 JWT；响应直接沿用现有服务的
+`{root,nodes}`，每个节点包含 `toAct`、合法 `acts` 与可选 `decision`。
 
 这是本项目的前置条件。仅靠前端隐藏 key、环境变量或用户手工复制 key，都不能保证“登录用户自己的配额”这一要求。
 
@@ -84,17 +89,13 @@ type ExplorerRangeResponse = {
 
 ## 前端范围与结构
 
-选择 React + TypeScript + Vite，保持单页应用、无应用自建后端、无数据库。
+第一版选择原生 JavaScript + Vite，直接移植现有后台 Preflop 浏览模块，保持单页应用、无应用自建后端、无数据库。暂不改写为 React，以免改变已经验证的业务行为。
 
 ```text
 src/
-  api/                 # Explorer API 与版本发现请求
-  auth/                # 登录态检查、登录跳转、登出
-  domain/              # 位置、盲注、行动序列、合法性与 13×13 映射
-  features/explorer/   # explorer 状态、查询、配额、错误与结果
-  components/          # action rail、seat control、range grid、quota badge
-  styles/              # Pokerai 产品站视觉 token 与组件皮肤
-  test/                # 单元和组件测试
+  main.js              # 原样移植的 Preflop 浏览逻辑 + 用户 JWT 接口适配
+  main.test.js         # 移植逻辑的关键 parity 测试
+  styles.css           # Pokerai 产品站视觉 token 与组件皮肤
 ```
 
 不包含：求解器、离线策略库、采集器、第三方数据导入、Postflop、导出、多人协作或账户管理。
@@ -133,7 +134,7 @@ src/
 
 1. **平台契约与服务端测试**：交付 JWT 鉴权、用户配额扣减、CORS/限流和错误约定。
 2. **脚手架与安全基线**：创建 Vite 项目、CI、依赖锁文件、忽略规则、`SECURITY.md`、README 和 secret scan。
-3. **领域模型**：实现 6-max 座位、行动序列、版本发现、输入验证与 API client。
+3. **领域模型**：原样移植现有后台 Preflop 库浏览模块，通过 `meta/tree/strategy` 驱动；除鉴权适配与样式外不重写业务逻辑。
 4. **Explorer 核心**：实现登录门禁、行动轨道、range 请求、13×13 grid、quota badge 与错误状态。
 5. **视觉与可用性**：按 Pokerai token 重做样式，同时保留 RangeConverter 式探索流程；完成键盘、移动端和暗色对比检查。
 6. **验收与公开发布**：完成测试、安全复审、许可确认、README 截图和 GitHub 发布设置。
