@@ -9,28 +9,7 @@
     <link rel="stylesheet" href="/src/styles.css" />
   </head>
   <body>
-    <nav class="site-nav" aria-label="Pokerai">
-      <div class="shell nav-inner">
-        <a class="brand" href="https://pokerai.bet">
-          <img src="https://pokerai.bet/assets/pokerai-icon.png" alt="" width="30" height="30" />
-          <span>Pokerai API</span>
-        </a>
-        <div class="nav-links">
-          <a href="https://pokerai.bet/docs">Docs</a>
-          <a href="https://pokerai.bet/reference">Reference</a>
-          <a class="current" href="https://pokerai.bet/ranges" aria-current="page">Ranges</a>
-          <a href="https://pokerai.bet/guides">Guides</a>
-          <a href="https://pokerai.bet/showcases">Showcases</a>
-          <a href="https://pokerai.bet/pricing">Pricing</a>
-          <a href="https://github.com/pokerai-bet" target="_blank" rel="noopener">GitHub</a>
-        </div>
-        <div class="nav-actions">
-          <span class="locale-label" aria-label="当前语言：中文">◎ ZH</span>
-          <span class="quota" id="pfquota"></span>
-          <a class="account-link" id="account-link" href="https://pokerai.bet/login">登录</a>
-        </div>
-      </div>
-    </nav>
+    <nav style="position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);background:rgba(6,8,6,.86);border-bottom:1px solid rgba(43,226,143,.16)"><div style="max-width:1180px;margin:0 auto;padding:0 28px;display:flex;align-items:center;gap:14px;height:62px"><a href="https://pokerai.bet/" style="display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;color:var(--text);text-decoration:none;white-space:nowrap"><img src="https://pokerai.bet/assets/pokerai-icon.png" alt="" width="30" height="30" style="width:30px;height:30px;border-radius:7px;display:block" /> Pokerai&nbsp;API</a><div class="nl" style="display:flex;gap:15px;margin-left:8px;font-size:13px"><a href="https://pokerai.bet/docs" style="color:var(--muted);text-decoration:none">Docs</a><a href="https://pokerai.bet/reference" style="color:var(--muted);text-decoration:none">Reference</a><a href="https://pokerai.bet/ranges" style="color:var(--muted);text-decoration:none">Ranges</a><a href="https://pokerai.bet/guides" style="color:var(--muted);text-decoration:none">Guides</a><a href="https://pokerai.bet/showcases" style="color:var(--muted);text-decoration:none">Showcases</a><a href="https://pokerai.bet/pricing" style="color:var(--muted);text-decoration:none">Pricing</a><a href="https://github.com/pokerai-bet" target="_blank" rel="noopener" style="color:var(--muted);text-decoration:none">GitHub</a></div><div style="margin-left:auto;display:flex;gap:12px;align-items:center;flex-shrink:0"><div style="position:relative"><button class="lang" id="lang" type="button" aria-label="Switch language" title="Switch language" aria-haspopup="menu" aria-expanded="false" aria-controls="language-menu" style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;color:var(--muted);font-size:12px;border:0;padding:5px 0;background:none;white-space:nowrap"><svg viewBox="0 0 24 24" aria-hidden="true" style="width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3a15 15 0 0 1 4 9 15 15 0 0 1-4 9 15 15 0 0 1-4-9 15 15 0 0 1 4-9Z"></path></svg><span data-lang-label>EN</span></button><div id="language-menu" role="menu" aria-label="Switch language" hidden style="position:absolute;right:0;top:calc(100% + 8px);min-width:172px;padding:4px;background:rgba(10,14,11,.98);border:1px solid var(--border);border-radius:7px;box-shadow:0 12px 28px rgba(0,0,0,.28)"><a data-language-target="en" href="https://pokerai.bet/preflop-explorer/" hreflang="en" lang="en" role="menuitem" aria-current="page" style="display:block;padding:8px 10px;color:var(--text);text-decoration:none;white-space:nowrap">English</a><a data-language-target="zh" href="https://pokerai.bet/zh/preflop-explorer/" hreflang="zh-Hans" lang="zh-Hans" role="menuitem" style="display:block;padding:8px 10px;color:var(--muted);text-decoration:none;white-space:nowrap">中文</a><a data-language-target="es" href="https://pokerai.bet/es/preflop-explorer/" hreflang="es" lang="es" role="menuitem" style="display:block;padding:8px 10px;color:var(--muted);text-decoration:none;white-space:nowrap">Español</a><a data-language-target="pt-BR" href="https://pokerai.bet/pt-br/preflop-explorer/" hreflang="pt-BR" lang="pt-BR" role="menuitem" style="display:block;padding:8px 10px;color:var(--muted);text-decoration:none;white-space:nowrap">Português (Brasil)</a><a data-language-target="ja" href="https://pokerai.bet/ja/preflop-explorer/" hreflang="ja" lang="ja" role="menuitem" style="display:block;padding:8px 10px;color:var(--muted);text-decoration:none;white-space:nowrap">日本語</a></div></div><a class="signin" data-account-link id="account-link" href="https://pokerai.bet/login" style="min-height:38px;display:inline-flex;align-items:center;border:1px solid var(--border);border-radius:7px;padding:0 14px;color:var(--text);font-size:13px;font-weight:700;text-decoration:none;white-space:nowrap">Sign in</a></div></div></nav>
     <main class="shell app-main">
       <header class="hero">
         <div>
@@ -50,6 +29,7 @@
           <select class="input" id="pfv" title="版本" aria-label="Preflop chart version"></select>
           <button class="btn ghost sm" id="pfreset" title="回到 UTG 首入">↺ 重置行动线</button>
           <span class="pill" id="pfcount"></span>
+          <span class="quota" id="pfquota"></span>
         </div>
         <div class="card"><div id="preflop-body"><div class="empty">选择版本后自动加载</div></div></div>
       </div>

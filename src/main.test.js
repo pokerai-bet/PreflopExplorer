@@ -8,15 +8,17 @@ describe('application shell', () => {
     expect(html).toContain('href="/src/styles.css"')
   })
 
-  it('matches the Pokerai product shell without adding a global Explorer link', () => {
+  it('uses the Pokerai product navigation without adding a global Explorer item', () => {
     const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
     const navigation = html.match(/<nav[\s\S]*?<\/nav>/)?.[0] || ''
+    const globalLinks = navigation.match(/<div class="nl"[\s\S]*?<\/div>/)?.[0] || ''
 
-    expect(navigation).toContain('class="site-nav"')
-    expect(navigation).toContain('href="https://pokerai.bet/ranges"')
-    expect(navigation).toContain('href="https://pokerai.bet/showcases"')
-    expect(navigation).toContain('aria-current="page"')
-    expect(navigation).not.toContain('/preflop-explorer/')
+    expect(navigation).toContain('class="nl"')
+    expect(globalLinks).toContain('href="https://pokerai.bet/ranges"')
+    expect(globalLinks).toContain('href="https://pokerai.bet/showcases"')
+    expect(globalLinks).not.toContain('Preflop Explorer')
+    expect(navigation).toContain('id="language-menu"')
+    expect(navigation).not.toContain('id="pfquota"')
     expect(html).toContain('class="site-footer"')
   })
 
