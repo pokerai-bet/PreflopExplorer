@@ -1,5 +1,13 @@
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { handAt, pfAggOf, pfComboLabel } from './main.js'
+
+describe('application shell', () => {
+  it('loads the explorer stylesheet', () => {
+    const html = readFileSync(new URL('../index.html', import.meta.url), 'utf8')
+    expect(html).toContain('href="/src/styles.css"')
+  })
+})
 
 describe('ported Luna preflop helpers', () => {
   it('keeps the upstream 13x13 hand ordering', () => {
