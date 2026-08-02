@@ -132,6 +132,7 @@ h1 { font: 800 42px/1.04 var(--sans); letter-spacing: -.035em; margin: 8px 0 7px
 .agl i, .selrow i { border-radius: 50%; display: inline-block; height: 8px; margin-right: 6px; width: 8px; }
 .rgcap { color: var(--text); font: 700 12px/1.2 var(--sans); margin: 14px 0 8px; }
 .ranges2 { display: grid; gap: 18px; grid-template-columns: 1fr 1fr; }
+.range-slot-empty { min-width: 0; }
 .hgrid { display: grid; gap: 3px; grid-template-columns: repeat(13, minmax(30px, 1fr)); overflow-x: auto; }
 .hcell { aspect-ratio: 1; background: #14201b; border: 1px solid #294039; border-radius: 3px; color: #eff7f3; min-width: 30px; overflow: hidden; position: relative; }
 .hcell.sc { cursor: pointer; }
@@ -166,6 +167,7 @@ h1 { font: 800 42px/1.04 var(--sans); letter-spacing: -.035em; margin: 8px 0 7px
 @media (max-width: 920px) {
   .nav-links { display: none; }
   .ranges2 { grid-template-columns: 1fr; }
+  .range-slot-empty { display: none; }
   .footer-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer-brand { grid-column: 1 / -1; }
 }

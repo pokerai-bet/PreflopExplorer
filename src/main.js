@@ -259,7 +259,8 @@ async function pfLoadStrat(decision, mine, selectedIndex) {
     }
     $('pfcount').textContent = tr('handsCount', Object.keys(grid).length, (result.actions || []).join('/'))
     const heroColumn = `<div><div class="rgcap">${esc(tr('heroStrategyHeading', decision.hero))}</div><div id="pfherogrid">${pfGridHtml(grid, true)}</div><div id="pfselR" class="cellsel"><span class="sub">${esc(tr('preciseStrategyHint', tr('rightSide'), decision.hero))}</span></div></div>`
-    wrap.innerHTML = `${pfAggBar(aggregate)}${priorHtml ? `<div class="ranges2">${priorHtml}${heroColumn}</div>` : heroColumn}`
+    const emptyColumn = '<div class="range-slot-empty" aria-hidden="true"></div>'
+    wrap.innerHTML = `${pfAggBar(aggregate)}<div class="ranges2">${priorHtml || heroColumn}${priorHtml ? heroColumn : emptyColumn}</div>`
     const heroGrid = $('pfherogrid')
     if (heroGrid) heroGrid.querySelectorAll('.hcell.sc').forEach((cell) => { cell.onclick = () => pfSelectHand(cell.dataset.h, cell, pfCur, 'pfselR') })
     const priorGrid = $('pfprigrid')
